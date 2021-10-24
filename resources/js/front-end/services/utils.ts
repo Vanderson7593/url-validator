@@ -1,3 +1,4 @@
+import { removeFirstLastChar } from "../utils/strings";
 import { ApiRequestMethod, HttpResponse } from "./services.types";
 
 const BASE_API_URL =
@@ -6,11 +7,13 @@ const BASE_API_URL =
 export const makeRequest =
     (method: ApiRequestMethod) =>
         async <T>(endpoint: string, data?: Object): Promise<HttpResponse<T>> => {
+            const accessToken = localStorage.getItem('accessToken')?.replaceAll('"', '')
             const response = await fetch(`${BASE_API_URL}${endpoint}`, {
                 method,
                 headers: {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
+                    "Authorization": `Bearer ${accessToken || ''}`
                 },
                 body: JSON.stringify(data),
             });

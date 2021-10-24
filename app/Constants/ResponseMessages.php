@@ -8,6 +8,7 @@ final class ResponseMessages
   public const URL_CREATED = 'Url created!';
   public const USER_CREATED = 'User created!';
   public const USER_LOGEDOUT = 'User logedout!';
+  public const INVALID_CREDENTIALS = 'Invalid credentials!';
   public const URL_NOT_PROCESSED = 'Url not processed yet!';
   public const INVALID_TOKEN = 'Invalid token!';
   public const TOKEN_EXPIRED = 'Token expired!';

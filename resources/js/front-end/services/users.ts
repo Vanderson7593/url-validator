@@ -1,12 +1,22 @@
+import { API_ROUTES } from "../constants/routes";
 import { ModelData } from "../types/services";
 import { IUser } from "../types/user";
-import { getRequest, postRequest } from "./utils";
+import { postRequest } from "./utils";
 
-export const getAllUsers = () => getRequest<ReadonlyArray<IUser>>(`/users`);
-
-export const getUser = (id: number) =>
-    getRequest<IUser>(`/users/${id}`);
+interface ILoginResponse {
+    user: IUser,
+    access_token: string,
+    expires_in: number
+}
 
 export const createUser = (data: any) =>
-    postRequest<ModelData<IUser>>(`/users`, data);
+    postRequest<ModelData<IUser>>(`${API_ROUTES.CREATE_USER}`, data);
 
+export const login = (data: any) =>
+    postRequest<ILoginResponse>(`${API_ROUTES.LOGIN}`, data);
+
+export const logout = () =>
+    postRequest<ModelData<null>>(`${API_ROUTES.LOGOUT}`);
+
+export const recoverUserData = () =>
+    postRequest<ModelData<IUser>>(`${API_ROUTES.ME}`);

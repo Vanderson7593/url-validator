@@ -11,5 +11,5 @@ import { format } from 'date-fns'
 export const formatDate = (date?: string | number | Date | null) => {
   if (!date) return '-';
   const d = new Date(date);
-  return Number.isNaN(d.getTime()) ? '-' : format(d, 'dd/MM/yyyy');
+  return Number.isNaN(d.getTime()) ? '-' : format(d, 'dd/MM/yyyy H:m');
 };

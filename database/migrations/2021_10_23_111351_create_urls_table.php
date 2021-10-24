@@ -18,7 +18,7 @@ class CreateUrlsTable extends Migration
       $table->id();
       $table->string(Url::LABEL);
       $table->string(Url::URL);
-      $table->string(Url::STATUS)->nullable();
+      $table->integer(Url::STATUS)->nullable();
       $table->text(Url::HTML)->nullable();
       $table->dateTime(Url::PROCESSED_AT)->nullable();
       $table->timestamps();

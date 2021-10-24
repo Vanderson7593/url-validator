@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,7 +11,21 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+mix.ts("resources/js/index.tsx", "public/js/app.js")
+    .react()
+    .postCss("resources/css/app.css", "public/css/app.css")
+    .webpackConfig({
+        module: {
+            rules: [
+                {
+                    test: /\.tsx?$/,
+                    loader: "ts-loader",
+                    exclude: /node_modules/,
+                    resolve: {
+                        extensions: [".ts", ".tsx", ".js", ".jsx"],
+                    },
+                },
+            ],
+        },
+    })
+    .browserSync("127.0.0.1:8000");

@@ -25,14 +25,14 @@ class AuthController extends Controller
         $validator = AuthValidator::validateAuthLogin();
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return $this->errorResponse($validator->errors(), 422);
         }
 
         if (!$token = auth()->attempt($validator->validated())) {
-            return $this->errorResponse('Invalid credentials', 422);
+            return $this->errorResponse(ResponseMessages::INVALID_CREDENTIALS, 422);
         }
 
-        return $this->createNewToken($token);
+        return $this->successResponse($this->createNewToken($token), null, ResponseStatusCode::SUCCESS);
     }
 
     /**
@@ -98,11 +98,11 @@ class AuthController extends Controller
      */
     protected function createNewToken($token)
     {
-        return response()->json([
+        return [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
             'user' => auth()->user()
-        ]);
+        ];
     }
 }

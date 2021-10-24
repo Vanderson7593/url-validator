@@ -1,7 +1,6 @@
 export enum EModel {
     ID = "id",
     TIMESTAMPS = "timestamps",
-    IS_DELETED = "is_deleted",
 }
 
 export enum ETimestamps {
