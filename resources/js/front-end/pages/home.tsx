@@ -76,7 +76,7 @@ const Home: FC<THomeProps> = ({ logOutCallback, user }) => {
                     <Typography variant="h3">{`${user?.name}'s URLs`}</Typography>
                     <Typography>
                         Wait till our bot process your url, its may take more
-                        than 4 minutes
+                        than 4 minutes! Refresh table to see the changes!
                     </Typography>
                 </Box>
                 <Box display="flex" style={{ gap: 10 }}>

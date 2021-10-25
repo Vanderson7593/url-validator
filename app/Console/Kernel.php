@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('verify:urls')->everyMinute();
+        $schedule->command('verify:urls')->everyFiveMinutes();
     }
 
     /**
