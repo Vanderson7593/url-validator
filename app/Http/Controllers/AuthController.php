@@ -45,7 +45,7 @@ class AuthController extends Controller
         $validator = AuthValidator::validateAuthRegister();
 
         if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
+            return $this->errorResponse($validator->errors(), 400);
         }
 
         $user = User::create(array_merge(

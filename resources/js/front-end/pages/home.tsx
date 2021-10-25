@@ -12,6 +12,7 @@ import { IUrl } from "../types/url";
 import { getAllUrls } from "../services/url";
 import Table from "../components/table";
 import { v4 as uuid } from "uuid";
+import { useHistory } from "react-router";
 const beautify_html = require("js-beautify").html;
 
 type THomeProps = {
@@ -24,6 +25,7 @@ const Home: FC<THomeProps> = ({ logOutCallback, user }) => {
     const [urls, setUrls] = useState<Array<IUrl>>([]);
     const [open, setOpen] = React.useState(false);
     const [selectedItem, setSelectedItem] = useState<IUrl>();
+    const history = useHistory();
 
     const handleOpenModal = () => setOpen(true);
     const handleCloseModal = () => setOpen(false);
@@ -38,8 +40,8 @@ const Home: FC<THomeProps> = ({ logOutCallback, user }) => {
     }, [refresher]);
 
     const handleShowHTML = (id: number) => {
-        handleOpenModal();
         setSelectedItem(urls.filter((url) => url.id === id)[0]);
+        if (selectedItem?.html) handleOpenModal();
     };
 
     return (
@@ -50,9 +52,12 @@ const Home: FC<THomeProps> = ({ logOutCallback, user }) => {
                 justifyContent="space-between"
                 textAlign="center"
             >
-                <Typography variant="h3">{`${user.name}'s URLs`}</Typography>
+                <Typography variant="h3">{`${user?.name}'s URLs`}</Typography>
                 <Box display="flex" style={{ gap: 10 }}>
-                    <Button variant="contained" onClick={handleRefresh}>
+                    <Button
+                        variant="contained"
+                        onClick={() => history.push("/url/create")}
+                    >
                         Create new URL
                     </Button>
                     <Button variant="contained" onClick={handleRefresh}>

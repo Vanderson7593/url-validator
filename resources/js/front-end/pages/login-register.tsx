@@ -7,12 +7,17 @@ import {
     Tabs,
     Tab,
 } from "@material-ui/core";
-import useAsyncState from "../hooks/use-async-state";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { IUser } from "../types/user";
 import { createUser, login } from "../services/users";
 
 import { useSnackbar } from "react-simple-snackbar";
+import {
+    loginValidationSchema,
+    registerValidationSchema,
+} from "../validators/auth";
+import { useHistory } from "react-router";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -48,13 +53,18 @@ const a11yProps = (index: number) => ({
 const LoginRegister: FC<{ loginCallback: (args: any) => void }> = ({
     loginCallback,
 }) => {
+    const [tab, setTab] = useState<number>(0);
+    const [openSnackbar, _] = useSnackbar();
+    const history = useHistory();
     const {
         handleSubmit,
         register,
         formState: { errors },
-    } = useForm<IUser>();
-    const [tab, setTab] = useState<number>(0);
-    const [openSnackbar, _] = useSnackbar();
+    } = useForm<IUser>({
+        resolver: yupResolver(
+            tab === 0 ? loginValidationSchema : registerValidationSchema
+        ),
+    });
 
     const handleFormSubmit = handleSubmit<IUser>(async (userFormData) => {
         try {
@@ -62,23 +72,28 @@ const LoginRegister: FC<{ loginCallback: (args: any) => void }> = ({
                 const res = await login(userFormData);
 
                 if (res.status === "error") {
-                    openSnackbar(res.message[0]);
+                    Object.values(res.message).map((x) => {
+                        openSnackbar(x);
+                    });
                     return;
                 }
 
                 if (res.status === "success") {
                     loginCallback(res);
+                    history.push("/");
                 }
             } else {
                 const res = await createUser(userFormData);
 
                 if (res.status === "error") {
-                    openSnackbar(res.message as string);
+                    Object.values(res.message).map((x) => {
+                        openSnackbar(x);
+                    });
                     return;
                 }
 
                 if (res.status === "success") {
-                    openSnackbar(res.message as string);
+                    openSnackbar(res.message);
                     setTab(0);
                 }
             }
@@ -114,22 +129,22 @@ const LoginRegister: FC<{ loginCallback: (args: any) => void }> = ({
                     >
                         <TextField
                             {...register("email")}
-                            error={!!errors?.email}
+                            error={!!errors?.email?.message}
                             type="email"
                             label="Email"
                             name="email"
                             variant="filled"
-                            // helperText={errors?.email}
+                            helperText={errors?.email?.message}
                         />
 
                         <TextField
                             {...register("password")}
-                            error={!!errors?.password}
+                            error={!!errors?.password?.message}
                             type="password"
                             label="Password"
                             name="password"
                             variant="filled"
-                            // helperText={errors?.password}
+                            helperText={errors?.password?.message}
                         />
 
                         <Button
@@ -151,32 +166,32 @@ const LoginRegister: FC<{ loginCallback: (args: any) => void }> = ({
                     >
                         <TextField
                             {...register("name")}
-                            error={!!errors?.name}
+                            error={!!errors?.name?.message}
                             label="Name"
                             name="name"
                             type="text"
                             variant="filled"
-                            // helperText={errors?.name}
+                            helperText={errors?.name?.message}
                         />
 
                         <TextField
                             {...register("email")}
-                            error={!!errors?.email}
+                            error={!!errors?.email?.message}
                             type="email"
                             label="Email"
                             name="email"
                             variant="filled"
-                            // helperText={errors?.email}
+                            helperText={errors?.email?.message}
                         />
 
                         <TextField
                             {...register("password")}
-                            error={!!errors?.password}
+                            error={!!errors?.password?.message}
                             type="password"
                             label="Password"
                             name="password"
                             variant="filled"
-                            // helperText={errors?.password}
+                            helperText={errors?.password?.message}
                         />
 
                         <Button

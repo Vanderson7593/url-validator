@@ -21,14 +21,8 @@ import { IUser } from "./types/user";
 import Home from "./pages/home";
 import { Box } from "@material-ui/core";
 import CreateUrl from "./pages/url/create";
-
-type AuthContextProps = {
-    user: IUser;
-    logOut: () => void;
-    logIn: (args: any) => void;
-};
-
-export const AuthContext = createContext<AuthContextProps | null>(null);
+import PrivateRoute from "./components/HOC/private-route";
+import ProtectedRoutes from "./components/HOC/protected-route";
 
 const App: FC = () => {
     const [user, setUser] = useState<IUser>();
@@ -36,6 +30,7 @@ const App: FC = () => {
         "accessToken",
         undefined
     );
+    const [canMount, setCanMount] = useState<boolean>(false);
 
     useEffect(() => {
         if (accessToken) {
@@ -45,9 +40,11 @@ const App: FC = () => {
                 } else {
                     setUser(null);
                 }
+                setCanMount(true);
             });
         } else {
             setUser(null);
+            setCanMount(true);
         }
     }, []);
 
@@ -64,6 +61,8 @@ const App: FC = () => {
         setUser(data.data.user);
     };
 
+    console.log(user);
+
     return (
         <Box
             display="flex"
@@ -72,39 +71,45 @@ const App: FC = () => {
             justifyContent="center"
             alignItems="center"
         >
-            <BrowserRouter>
-                <SnackbarProvider>
-                    <Switch>
-                        <Route
-                            path={"/login"}
-                            exact={true}
-                            children={() =>
-                                user ? (
-                                    <Redirect to="/" />
-                                ) : (
+            {canMount && (
+                <BrowserRouter>
+                    <SnackbarProvider>
+                        <Switch>
+                            <Route
+                                path={"/login"}
+                                exact={true}
+                                children={
                                     <LoginRegister loginCallback={logIn} />
-                                )
-                            }
-                        />
-                        <Route
-                            path={"/"}
-                            exact={true}
-                            children={
-                                !user ? (
-                                    <Redirect to="/login" />
-                                ) : (
-                                    <Home logOutCallback={logOut} user={user} />
-                                )
-                            }
-                        />
-                        <Route
-                            path={"/url/create"}
-                            exact={true}
-                            children={<CreateUrl />}
-                        />
-                    </Switch>
-                </SnackbarProvider>
-            </BrowserRouter>
+                                }
+                            />
+                            <PrivateRoute
+                                path="/"
+                                hasUser={user ? true : false}
+                            >
+                                <ProtectedRoutes
+                                    routes={[
+                                        {
+                                            path: "/",
+                                            component: (
+                                                <Home
+                                                    logOutCallback={logOut}
+                                                    user={user}
+                                                />
+                                            ),
+                                            exact: true,
+                                        },
+                                        {
+                                            path: "/url/create",
+                                            component: <CreateUrl />,
+                                            exact: true,
+                                        },
+                                    ]}
+                                />
+                            </PrivateRoute>
+                        </Switch>
+                    </SnackbarProvider>
+                </BrowserRouter>
+            )}
         </Box>
     );
 };
@@ -114,5 +119,3 @@ export default App;
 if (document.getElementById("app")) {
     ReactDOM.render(<App />, document.getElementById("app"));
 }
-
-export const useAuthContext = () => useContext(AuthContext) as AuthContextProps;

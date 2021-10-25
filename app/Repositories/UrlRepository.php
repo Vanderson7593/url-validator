@@ -43,7 +43,7 @@ class UrlRepository implements UrlRepositoryInterface
    */
   public function getUrlById($urlId)
   {
-    return $this->entity->where(Model::ID, $urlId)->get();
+    return $this->entity->where(Model::ID, $urlId)->first();
   }
 
   /**

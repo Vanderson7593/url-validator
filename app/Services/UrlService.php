@@ -7,6 +7,7 @@ use App\Constants\ResponseStatusCode;
 use App\Models\Url;
 use App\Models\User;
 use App\Repositories\Contracts\UrlRepositoryInterface;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Traits\ApiResponser;
 use App\Validators\UrlValidator;
 use Carbon\Carbon;
@@ -16,10 +17,12 @@ class UrlService
   use ApiResponser;
 
   protected $urlRepository;
+  protected $userRepository;
 
-  public function __construct(UrlRepositoryInterface $urlRepository)
+  public function __construct(UrlRepositoryInterface $urlRepository, UserRepositoryInterface $userRepository)
   {
     $this->urlRepository = $urlRepository;
+    $this->userRepository = $userRepository;
   }
 
   public function getUrlsByUserId()
@@ -31,21 +34,11 @@ class UrlService
   public function createUrl()
   {
     $validator = UrlValidator::validateUrl();
-    $user = User::find(auth()->user()->id);
+    $user = $this->userRepository->getUserById(auth()->user()->id);
 
     if ($validator->fails()) {
       return $this->errorResponse($validator->errors(), ResponseStatusCode::UNPROCESSABLE_ENTITY);
     }
-
-    // $html = @file_get_contents('https://aaaaaaa.com', false, stream_context_create(['http' => ['ignore_errors' => true]]));
-    // if ($html) {
-    //   $status_code_header = $http_response_header[25] ?? null;
-    //   dd($html);
-    //   $str = explode(' ', $status_code_header);
-    //   $status_code = $str[1];
-    // }
-
-
 
     $url = $user->urls()->save(new Url($validator->validated()));
 

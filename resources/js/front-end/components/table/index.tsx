@@ -81,9 +81,13 @@ const Table: FC<TTableProps> = ({ urls, onClickCallback }) => (
             <DataGrid
                 rows={dataModifier(urls)}
                 columns={columns}
-                pageSize={20}
+                pageSize={10}
                 disableSelectionOnClick
-                onCellClick={(item) => onClickCallback(item.id as number)}
+                onCellClick={(cell) => {
+                    if (cell.field === "actions" && cell.formattedValue)
+                        onClickCallback(cell.id as number);
+                }}
+                rowsPerPageOptions={[10]}
             />
         </Box>
     </>
