@@ -39,25 +39,25 @@
 
 ### Routes
 
-+--------+----------------------------------------+---------------------+------+------------------------------------------------------------+-----------------------------------+
-| Domain | Method | URI | Name | Action | Middleware |
-+--------+----------------------------------------+---------------------+------+------------------------------------------------------------+-----------------------------------+
-| | GET|HEAD | / | | Closure | web |
-| | POST | api/auth/login | | App\Http\Controllers\AuthController@login | api |
-| | POST | api/auth/logout | | App\Http\Controllers\AuthController@logout | api |
-| | | | | | App\Http\Middleware\JwtMiddleware |
-| | POST | api/auth/me | | App\Http\Controllers\AuthController@me | api |
-| | | | | | App\Http\Middleware\JwtMiddleware |
-| | POST | api/auth/refresh | | App\Http\Controllers\AuthController@refresh | api |
-| | | | | | App\Http\Middleware\JwtMiddleware |
-| | POST | api/auth/register | | App\Http\Controllers\AuthController@register | api |
-| | GET|HEAD | api/urls | | App\Http\Controllers\UrlController@index | api |
-| | | | | | App\Http\Middleware\JwtMiddleware |
-| | POST | api/urls/create | | App\Http\Controllers\UrlController@create | api |
-| | | | | | App\Http\Middleware\JwtMiddleware |
-| | GET|HEAD | sanctum/csrf-cookie | | Laravel\Sanctum\Http\Controllers\CsrfCookieController@show | web |
-| | GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS | {any}/{all?} | | Closure | web |
-+--------+----------------------------------------+---------------------+------+------------------------------------------------------------+-----------------------------------+
+```
++--------+----------------------------------------+--------------------------------------+---------------+------------------------------------------------------------+------------+
+| Domain | Method                                 | URI                                  | Name          | Action                                                     | Middleware |
++--------+----------------------------------------+--------------------------------------+---------------+------------------------------------------------------------+------------+
+|        | GET|HEAD                               | /                                    |               | Closure                                                    | web        |
+|        | GET|HEAD                               | api/courses                          | courses.index | App\Http\Controllers\CourseController@index                | api        |
+|        | POST                                   | api/courses                          | courses.store | App\Http\Controllers\CourseController@store                | api        |
+|        | GET|HEAD                               | api/subscriptions                    | index         | App\Http\Controllers\SubscriptionController@index          | api        |
+|        | POST                                   | api/subscriptions                    | store         | App\Http\Controllers\SubscriptionController@store          | api        |
+|        | PATCH                                  | api/subscriptions/status/update/{id} |               | App\Http\Controllers\SubscriptionController@updateStatus   | api        |
+|        | GET|HEAD                               | api/subscriptions/{}                 | show          | App\Http\Controllers\SubscriptionController@show           | api        |
+|        | PUT|PATCH                              | api/subscriptions/{}                 | update        | App\Http\Controllers\SubscriptionController@update         | api        |
+|        | DELETE                                 | api/subscriptions/{}                 | destroy       | App\Http\Controllers\SubscriptionController@destroy        | api        |
+|        | GET|HEAD                               | api/users                            | users.index   | App\Http\Controllers\UserController@index                  | api        |
+|        | POST                                   | api/users                            | users.store   | App\Http\Controllers\UserController@store                  | api        |
+|        | GET|HEAD                               | sanctum/csrf-cookie                  |               | Laravel\Sanctum\Http\Controllers\CsrfCookieController@show | web        |
+|        | GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS | {any}/{all?}                         |               | Closure                                                    | web        |
++--------+----------------------------------------+--------------------------------------+---------------+------------------------------------------------------------+------------+
+```
 
 ### Run
 
