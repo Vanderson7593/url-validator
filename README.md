@@ -1,65 +1,80 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## :rocket: This is a simple URL validator.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Used Technologies
 
-## About Laravel
+1. React - Javascript framework
+2. Laravel - PHP framework
+3. Mysql - Relational database
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Installation Instructions
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. Run `git clone https://github.com/Vanderson7593/url-validator.git`
+1. Create a MySQL database for the project
+    - `mysql -u root -p`, if using Vagrant: `mysql -u homestead -psecret`
+    - `create database url-validator;`
+    - `\q`
+1. Configure your `.env` file
+1. Run `composer update` from the projects root folder
+1. From the projects root folder run `php artisan migrate`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+#### Build the Front End Assets with Mix
 
-## Learning Laravel
+##### Using Yarn:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. From the projects root folder run `yarn install`
+2. From the projects root folder run `yarn run dev` or `yarn run production`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   You can watch assets with `yarn run watch`
 
-## Laravel Sponsors
+##### Using NPM:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+1. From the projects root folder run `npm install`
+2. From the projects root folder run `npm run dev` or `npm run production`
 
-### Premium Partners
+-   You can watch assets with `npm run watch`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+#### Optionally Build Cache
+
+1. From the projects root folder run `php artisan config:cache`
+
+### Routes
+
++--------+----------------------------------------+---------------------+------+------------------------------------------------------------+-----------------------------------+
+| Domain | Method | URI | Name | Action | Middleware |
++--------+----------------------------------------+---------------------+------+------------------------------------------------------------+-----------------------------------+
+| | GET|HEAD | / | | Closure | web |
+| | POST | api/auth/login | | App\Http\Controllers\AuthController@login | api |
+| | POST | api/auth/logout | | App\Http\Controllers\AuthController@logout | api |
+| | | | | | App\Http\Middleware\JwtMiddleware |
+| | POST | api/auth/me | | App\Http\Controllers\AuthController@me | api |
+| | | | | | App\Http\Middleware\JwtMiddleware |
+| | POST | api/auth/refresh | | App\Http\Controllers\AuthController@refresh | api |
+| | | | | | App\Http\Middleware\JwtMiddleware |
+| | POST | api/auth/register | | App\Http\Controllers\AuthController@register | api |
+| | GET|HEAD | api/urls | | App\Http\Controllers\UrlController@index | api |
+| | | | | | App\Http\Middleware\JwtMiddleware |
+| | POST | api/urls/create | | App\Http\Controllers\UrlController@create | api |
+| | | | | | App\Http\Middleware\JwtMiddleware |
+| | GET|HEAD | sanctum/csrf-cookie | | Laravel\Sanctum\Http\Controllers\CsrfCookieController@show | web |
+| | GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS | {any}/{all?} | | Closure | web |
++--------+----------------------------------------+---------------------+------+------------------------------------------------------------+-----------------------------------+
+
+### Run
+
+To run the server:
+
+```
+php artisan serve
+```
+
+### Tests
+
+To run PHPUnit tests:
+
+```
+php artisan test
+```
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
