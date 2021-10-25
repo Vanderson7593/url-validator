@@ -65,8 +65,20 @@ const Home: FC<THomeProps> = ({ logOutCallback, user }) => {
                 alignItems="center"
                 justifyContent="space-between"
                 textAlign="center"
+                width="90vw"
             >
-                <Typography variant="h3">{`${user?.name}'s URLs`}</Typography>
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="flex-start"
+                    alignItems="flex-start"
+                >
+                    <Typography variant="h3">{`${user?.name}'s URLs`}</Typography>
+                    <Typography>
+                        Wait till our bot process your url, its may take more
+                        than 4 minutes
+                    </Typography>
+                </Box>
                 <Box display="flex" style={{ gap: 10 }}>
                     <Button
                         variant="contained"
@@ -82,9 +94,14 @@ const Home: FC<THomeProps> = ({ logOutCallback, user }) => {
                     </Button>
                 </Box>
             </Box>
-            <Box>
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                style={{ gap: 20 }}
+            >
                 {loading ? (
-                    <Loader />
+                    <Loader style={{ marginTop: 150 }} />
                 ) : (
                     <Table urls={urls} onClickCallback={handleShowHTML} />
                 )}
