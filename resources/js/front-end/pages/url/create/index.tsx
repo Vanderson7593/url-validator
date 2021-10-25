@@ -91,7 +91,7 @@ const CreateUrl: FC = () => {
                             color="primary"
                             type="submit"
                         >
-                            Submit form
+                            Create URL
                         </Button>
                     </Box>
                 </form>
