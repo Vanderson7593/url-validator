@@ -6,6 +6,7 @@ import {
     Typography,
     Tabs,
     Tab,
+    CircularProgress as Loader,
 } from "@material-ui/core";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -54,6 +55,7 @@ const LoginRegister: FC<{ loginCallback: (args: any) => void }> = ({
     loginCallback,
 }) => {
     const [tab, setTab] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(false);
     const [openSnackbar, _] = useSnackbar();
     const history = useHistory();
     const {
@@ -68,6 +70,7 @@ const LoginRegister: FC<{ loginCallback: (args: any) => void }> = ({
 
     const handleFormSubmit = handleSubmit<IUser>(async (userFormData) => {
         try {
+            setLoading(true);
             if (tab === 0) {
                 const res = await login(userFormData);
 
@@ -99,6 +102,8 @@ const LoginRegister: FC<{ loginCallback: (args: any) => void }> = ({
             }
         } catch (error) {
             openSnackbar(error[0]);
+        } finally {
+            setLoading(false);
         }
     });
 
@@ -106,106 +111,108 @@ const LoginRegister: FC<{ loginCallback: (args: any) => void }> = ({
         setTab(newValue);
     };
 
-    console.log(errors);
+    if (loading) {
+        return <Loader />;
+    } else {
+        return (
+            <Box>
+                <Box width={400}>
+                    <Tabs
+                        value={tab}
+                        onChange={handleChange}
+                        aria-label="Login - Register Tabs"
+                    >
+                        <Tab label="Login" {...a11yProps(0)} />
+                        <Tab label="Register" {...a11yProps(1)} />
+                    </Tabs>
+                </Box>
+                <TabPanel value={tab} index={0}>
+                    <form onSubmit={handleFormSubmit}>
+                        <Box
+                            display="flex"
+                            flexDirection="column"
+                            style={{ gap: 20 }}
+                        >
+                            <TextField
+                                {...register("email")}
+                                error={!!errors?.email?.message}
+                                type="email"
+                                label="Email"
+                                name="email"
+                                variant="filled"
+                                helperText={errors?.email?.message}
+                            />
 
-    return (
-        <Box>
-            <Box width={400}>
-                <Tabs
-                    value={tab}
-                    onChange={handleChange}
-                    aria-label="Login - Register Tabs"
-                >
-                    <Tab label="Login" {...a11yProps(0)} />
-                    <Tab label="Register" {...a11yProps(1)} />
-                </Tabs>
+                            <TextField
+                                {...register("password")}
+                                error={!!errors?.password?.message}
+                                type="password"
+                                label="Password"
+                                name="password"
+                                variant="filled"
+                                helperText={errors?.password?.message}
+                            />
+
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                            >
+                                Login
+                            </Button>
+                        </Box>
+                    </form>
+                </TabPanel>
+                <TabPanel value={tab} index={1}>
+                    <form onSubmit={handleFormSubmit}>
+                        <Box
+                            display="flex"
+                            flexDirection="column"
+                            style={{ gap: 20 }}
+                        >
+                            <TextField
+                                {...register("name")}
+                                error={!!errors?.name?.message}
+                                label="Name"
+                                name="name"
+                                type="text"
+                                variant="filled"
+                                helperText={errors?.name?.message}
+                            />
+
+                            <TextField
+                                {...register("email")}
+                                error={!!errors?.email?.message}
+                                type="email"
+                                label="Email"
+                                name="email"
+                                variant="filled"
+                                helperText={errors?.email?.message}
+                            />
+
+                            <TextField
+                                {...register("password")}
+                                error={!!errors?.password?.message}
+                                type="password"
+                                label="Password"
+                                name="password"
+                                variant="filled"
+                                helperText={errors?.password?.message}
+                            />
+
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                            >
+                                Register
+                            </Button>
+                        </Box>
+                    </form>
+                </TabPanel>
             </Box>
-            <TabPanel value={tab} index={0}>
-                <form onSubmit={handleFormSubmit}>
-                    <Box
-                        display="flex"
-                        flexDirection="column"
-                        style={{ gap: 20 }}
-                    >
-                        <TextField
-                            {...register("email")}
-                            error={!!errors?.email?.message}
-                            type="email"
-                            label="Email"
-                            name="email"
-                            variant="filled"
-                            helperText={errors?.email?.message}
-                        />
-
-                        <TextField
-                            {...register("password")}
-                            error={!!errors?.password?.message}
-                            type="password"
-                            label="Password"
-                            name="password"
-                            variant="filled"
-                            helperText={errors?.password?.message}
-                        />
-
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                        >
-                            Login
-                        </Button>
-                    </Box>
-                </form>
-            </TabPanel>
-            <TabPanel value={tab} index={1}>
-                <form onSubmit={handleFormSubmit}>
-                    <Box
-                        display="flex"
-                        flexDirection="column"
-                        style={{ gap: 20 }}
-                    >
-                        <TextField
-                            {...register("name")}
-                            error={!!errors?.name?.message}
-                            label="Name"
-                            name="name"
-                            type="text"
-                            variant="filled"
-                            helperText={errors?.name?.message}
-                        />
-
-                        <TextField
-                            {...register("email")}
-                            error={!!errors?.email?.message}
-                            type="email"
-                            label="Email"
-                            name="email"
-                            variant="filled"
-                            helperText={errors?.email?.message}
-                        />
-
-                        <TextField
-                            {...register("password")}
-                            error={!!errors?.password?.message}
-                            type="password"
-                            label="Password"
-                            name="password"
-                            variant="filled"
-                            helperText={errors?.password?.message}
-                        />
-
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                        >
-                            Register
-                        </Button>
-                    </Box>
-                </form>
-            </TabPanel>
-        </Box>
-    );
+        );
+    }
 };
 
 export default LoginRegister;

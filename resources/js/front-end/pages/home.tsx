@@ -6,6 +6,7 @@ import {
     Typography,
     Backdrop,
     Fade,
+    CircularProgress as Loader,
 } from "@material-ui/core";
 import { IUser } from "../types/user";
 import { IUrl } from "../types/url";
@@ -13,6 +14,7 @@ import { getAllUrls } from "../services/url";
 import Table from "../components/table";
 import { v4 as uuid } from "uuid";
 import { useHistory } from "react-router";
+import { useSnackbar } from "react-simple-snackbar";
 const beautify_html = require("js-beautify").html;
 
 type THomeProps = {
@@ -24,7 +26,9 @@ const Home: FC<THomeProps> = ({ logOutCallback, user }) => {
     const [refresher, setRefresher] = useState<string>("");
     const [urls, setUrls] = useState<Array<IUrl>>([]);
     const [open, setOpen] = React.useState(false);
+    const [openSnackbar, _] = useSnackbar();
     const [selectedItem, setSelectedItem] = useState<IUrl>();
+    const [loading, setLoading] = useState<boolean>(false);
     const history = useHistory();
 
     const handleOpenModal = () => setOpen(true);
@@ -34,8 +38,18 @@ const Home: FC<THomeProps> = ({ logOutCallback, user }) => {
 
     useEffect(() => {
         (async () => {
-            const res = await getAllUrls();
-            setUrls(res.data);
+            try {
+                setLoading(true);
+                await getAllUrls().then((res) => {
+                    setUrls(res.data);
+                });
+            } catch (err) {
+                Object.values(err).map((x) => {
+                    openSnackbar(x);
+                });
+            } finally {
+                setLoading(false);
+            }
         })();
     }, [refresher]);
 
@@ -69,12 +83,14 @@ const Home: FC<THomeProps> = ({ logOutCallback, user }) => {
                 </Box>
             </Box>
             <Box>
-                <Table urls={urls} onClickCallback={handleShowHTML} />
+                {loading ? (
+                    <Loader />
+                ) : (
+                    <Table urls={urls} onClickCallback={handleShowHTML} />
+                )}
             </Box>
 
             <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
                 open={open}
                 onClose={handleCloseModal}
                 closeAfterTransition
