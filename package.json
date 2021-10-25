@@ -12,7 +12,7 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "postinstall": "npm run production"
+        "postinstall": "npm run prod"
     },
     "devDependencies": {
         "@babel/preset-react": "^7.14.5",
