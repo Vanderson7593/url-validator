@@ -1,8 +1,8 @@
 {
     "private": true,
     "engines": {
-        "node": "7.6.0",
-        "yarn": "0.21.3"
+        "node": "12.18.2",
+        "yarn": "1.22.15"
       },
     "scripts": {
         "dev": "npm run development",
@@ -12,7 +12,7 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "postinstall": "npm run prod"
+        "postinstall": "yarn run prod"
     },
     "devDependencies": {
         "@babel/preset-react": "^7.14.5",
