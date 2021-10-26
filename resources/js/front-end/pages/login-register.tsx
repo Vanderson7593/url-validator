@@ -75,9 +75,7 @@ const LoginRegister: FC<{ loginCallback: (args: any) => void }> = ({
                 const res = await login(userFormData);
 
                 if (res.status === "error") {
-                    Object.values(res.message).map((x) => {
-                        openSnackbar(x);
-                    });
+                    openSnackbar(res.message);
                     return;
                 }
 
