@@ -1,14 +1,11 @@
 import { removeFirstLastChar } from "../utils/strings";
 import { ApiRequestMethod, HttpResponse } from "./services.types";
 
-const BASE_API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-
 export const makeRequest =
     (method: ApiRequestMethod) =>
         async <T>(endpoint: string, data?: Object): Promise<HttpResponse<T>> => {
             const accessToken = localStorage.getItem('accessToken')?.replaceAll('"', '')
-            const response = await fetch(`${BASE_API_URL}${endpoint}`, {
+            const response = await fetch(`https://user-url-validator-app.herokuapp.com/api${endpoint}`, {
                 method,
                 headers: {
                     "Content-Type": "application/json",
