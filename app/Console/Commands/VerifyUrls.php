@@ -56,7 +56,7 @@ class VerifyUrls extends Command
 
 
       if ($httpcode >= 200 && $httpcode <= 299) {
-        $url[ConstantsUrl::HTML] = $html;
+        $url[ConstantsUrl::HTML] = utf8_encode($html);
       } else {
         $url[ConstantsUrl::HTML] = null;
       }

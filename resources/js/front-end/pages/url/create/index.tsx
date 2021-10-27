@@ -84,6 +84,7 @@ const CreateUrl: FC = () => {
                             label="Url"
                             name="url"
                             variant="filled"
+                            placeholder="https://www.google.com"
                             helperText={errors?.url?.message}
                         />
                         <Button
